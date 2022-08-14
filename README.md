@@ -1,7 +1,7 @@
 # How to Use
 ``` git clone https://github.com/akshayubc/ubc-course-compare.git```
 1. Install dependencies [requirements.txt]
-2. Move to main.py directory and run: 
+2. Move to main.py directory and run: <br>
 ```streamlit run main.py```
 
 # What's special
