@@ -5,8 +5,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 
 st.header("UBC Course Compare")
-url = "/Users/akshaykhandelwal/Desktop/UBC-compare/tableau-dashboard/UBCV"
-url2 = "/Users/akshaykhandelwal/Desktop/UBC-compare/tableau-dashboard/UBCV"
+url = "https://raw.githubusercontent.com/DonneyF/ubc-pair-grade-data/1516765eb6fd962066149b18ec8c6d64ae06046a/tableau-dashboard/UBCV"
+url2 = "https://raw.githubusercontent.com/DonneyF/ubc-pair-grade-data/1516765eb6fd962066149b18ec8c6d64ae06046a/tableau-dashboard/UBCV"
 
 course_list = ['AANB','ACAM','ADHE','AFST','AGEC','AMNE','ANAT','ANTH','APBI','APPP','APSC','AQUA','ARBC','ARBM','ARC *','ARCH','ARCL','ARST','ARTC','ARTH','ARTS','ASIA','ASIC','ASL','ASLA *','ASTR','ASTU','ATSC','AUDI','BA','BAAC','BABS','BAEN','BAFI','BAHR','BAIT','BALA','BAMA','BAMS','BAPA','BASC','BASM','BAUL','BEST','BIOC','BIOF','BIOL','BIOT','BMEG','BOTA','BRDG','BUSI','CAPS','CCFI','CCST','CDST','CEEN','CELL','CENS','CHBE','CHEM','CHIL','CHIN','CIVL','CLST *','CNPS','CNTO','COEC','COGS','COHR','COLX','COMM','COMR','CONS','CPEN','CPSC','CRWR','CSIS','CSPW','CTLN *','DANI','DENT','DES','DHYG','DMED','DSCI','ECED','ECON','ECPS','EDCP','EDST','EDUC','EECE','ELEC','ELI','EMBA *','ENDS *','ENGL','ENPH','ENPP *','ENST','ENVE','ENVR','EOSC','EPSE','ETEC','EXCH','EXGR','FACT *','FCOR','FEBC','FIPR','FISH','FIST','FMPR *','FMST','FNEL','FNH','FNIS','FOOD','FOPE','FOPR','FRE','FREN','FRSI *','FRST','FSCT','GEM','GENE','GEOG','GEOS','GERM','GREK','GRS','GRSJ','GSAT','HEBR','HESO *','HGSE','HINU','HIST','HPB','HUNU','IAR','IEST *','IGEN','ILS *','INDO *','INDS','INFO','INLB','ISCI','ITAL','ITST *','IWME','JAPN','JRNL','KIN','KORN','LAIS','LARC','LASO','LAST','LATN','LAW','LFS','LIBE','LIBR','LING','LLED','LWS','MANU','MATH','MDIA *','MDVL','MECH','MEDD','MEDG','MEDI','MES','MGMT *','MICB','MIDW','MINE','MRNE','MTRL','MUSC','NAME','NEPL *','NEST *','NEUR *','NRSC','NSCI','NURS','OBMS *','OBST','OHS *','ONCO','ORNT','ORPA','OSOT','PATH','PCTH','PERS','PHAR','PHIL','PHRM','PHTH','PHYL *','PHYS','PLAN','PLAS *','PLNT','POLI','POLS','PORT','PPGA','PRHC *','PSYC','PSYT','PUNJ','RADI *','RADS *','RELG','RES','RGLA *','RGST','RHSC','RMST','RUSS','SANS','SCAN','SCIE','SEAL','SGES *','SLAV','SOAL *','SOCI','SOIL','SOWK','SPAN','SPE','SPHA','SPPH','STAT','STS','SURG','SWED','TEST','THFL','THTR','TIBT','TRSC','UDES','UFOR','UKRN *','URO *','UROL *','URST','URSY','VANT','VGRD','VISA','VRHC *','VURS','WACH','WOOD','WRDS','WRIT *','ZOOL']
 
@@ -19,7 +19,7 @@ cc1 = st.sidebar.selectbox(
 
 year1 = st.sidebar.selectbox(
      'Enter year for Course 1',
-     (list(range(2014, 2022))), 6)
+     (list(range(2014, 2022))), 7)
 
 term1 = st.sidebar.radio(
      "Select Term for Course 1:  Summer (S), Winter (W)",
@@ -134,7 +134,7 @@ overall1 = pd.DataFrame(overall1)
 y_c1 = [y1.values(),y2.values(),y3.values(),y4.values(),y5.values(),y6.values(),y7.values(),y8.values(),y9.values(),y10.values(),y11.values()]
 y_c2 = [y21.values(),y22.values(),y23.values(),y24.values(),y25.values(),y26.values(),y27.values(),y28.values(),y29.values(),y30.values(),y31.values()]
 chart_data = pd.DataFrame(
- y_c1, x, 
+ y_c1, x[:len(x):1], 
 #plt.ylabel("Number of Students"),
 # plt.title(overall1['Title'])
 )
