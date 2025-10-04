@@ -237,7 +237,7 @@ def main():
         - **2022-2024**: Tableau Dashboard v2 (Latest)
         
         **Data Sources:**
-        - [UBC PAIR Grade Distribution Data](https://github.com/DonneyF/ubc-pair-grade-data)
+        - UBC Planning, Analytics, & Institutional Research Office - Grade Distribution Data
         - Updated regularly with new semester data
         
         **Note**: Data structure changed in 2022, but the app automatically handles both formats.
@@ -458,7 +458,7 @@ def main():
     st.sidebar.markdown("---")
     st.sidebar.markdown("**Need help?**")
     st.sidebar.markdown("Contact: akshay.ubcv@gmail.com")
-    st.sidebar.markdown("**Data Source:** [UBC PAIR Grade Distribution](https://github.com/DonneyF/ubc-pair-grade-data)")
+    st.sidebar.markdown("**Data Source:** UBC Planning, Analytics, & Institutional Research Office")
     st.sidebar.markdown("**Coverage:** 2014-2024")
     
     # Instructions
