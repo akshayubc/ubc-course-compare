@@ -243,13 +243,6 @@ def main():
         **Note**: Data structure changed in 2022, but the app automatically handles both formats.
         """)
     
-    # # Debug mode toggle
-    # debug_mode = st.sidebar.checkbox("🔧 Debug Mode", help="Show additional debugging information")
-    # if debug_mode:
-    #     st.session_state['debug_mode'] = True
-    # else:
-    #     st.session_state['debug_mode'] = False
-    
     # Sidebar
     st.sidebar.header("📚 Course Selection")
     st.sidebar.markdown("Select two courses to compare:")
@@ -267,7 +260,7 @@ def main():
     year1 = st.sidebar.selectbox(
         "Year",
         YEARS,
-        index=YEARS.index(2019),  # Default to 2019
+        index=YEARS.index(2023),  # Default to 2023
         key="year1",
         help="Data available from 2014-2024"
     )
@@ -313,7 +306,7 @@ def main():
     year2 = st.sidebar.selectbox(
         "Year",
         YEARS,
-        index=YEARS.index(2020),  # Default to 2020
+        index=YEARS.index(2022),  # Default to 2022
         key="year2",
         help="Data available from 2014-2024"
     )
@@ -331,10 +324,10 @@ def main():
     
     if course2_data is not None:
         course2_numbers = sorted(course2_data['Course'].unique())
-        # Default to 110 if available, otherwise first available course
+        # Default to 121 if available, otherwise first available course
         default_course2_index = 0
-        if 110 in course2_numbers:
-            default_course2_index = course2_numbers.index(110)
+        if 121 in course2_numbers:
+            default_course2_index = course2_numbers.index(121)
         
         course2_number = st.sidebar.selectbox(
             "Course Number",
@@ -393,13 +386,13 @@ def main():
                             st.metric("Median Grade", "N/A")
                         
                         if grade_stats1['instructor'] is not None:
-                            st.metric("Instructor", grade_stats1['instructor'])
+                            st.markdown(f"**Instructor:** <span style='font-size: 0.8em;'>{grade_stats1['instructor']}</span>", unsafe_allow_html=True)
                         else:
-                            st.metric("Instructor", "N/A")
+                            st.markdown("**Instructor:** <span style='font-size: 0.8em;'>N/A</span>", unsafe_allow_html=True)
                     else:
                         st.metric("Average Grade", "N/A")
                         st.metric("Median Grade", "N/A")
-                        st.metric("Instructor", "N/A")
+                        st.markdown("**Instructor:** <span style='font-size: 0.8em;'>N/A</span>", unsafe_allow_html=True)
                     
                     # Grade distribution table
                     dist_df1 = pd.DataFrame(list(stats1['distribution_pct'].items()), 
@@ -427,13 +420,13 @@ def main():
                             st.metric("Median Grade", "N/A")
                         
                         if grade_stats2['instructor'] is not None:
-                            st.metric("Instructor", grade_stats2['instructor'])
+                            st.markdown(f"**Instructor:** <span style='font-size: 0.8em;'>{grade_stats2['instructor']}</span>", unsafe_allow_html=True)
                         else:
-                            st.metric("Instructor", "N/A")
+                            st.markdown("**Instructor:** <span style='font-size: 0.8em;'>N/A</span>", unsafe_allow_html=True)
                     else:
                         st.metric("Average Grade", "N/A")
                         st.metric("Median Grade", "N/A")
-                        st.metric("Instructor", "N/A")
+                        st.markdown("**Instructor:** <span style='font-size: 0.8em;'>N/A</span>", unsafe_allow_html=True)
                     
                     # Grade distribution table
                     dist_df2 = pd.DataFrame(list(stats2['distribution_pct'].items()), 
@@ -485,7 +478,12 @@ def main():
         - Compare different courses in the same term to see relative difficulty
         - Use the charts to identify grade distribution patterns
         - Check the summary statistics for enrollment numbers
+
         """)
+    
+    # Developer credit
+    st.markdown("---")
+    st.markdown("Developed by <a href='https://akshayubc.github.io/'>Akshay K.</a>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
