@@ -1,6 +1,6 @@
 import numpy as np
-import pandas as pd
-import streamlit as st
+import pandas as pd 
+import streamlit as st 
 import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
@@ -171,13 +171,66 @@ def calculate_summary_stats(data):
         }
     return None
 
+def calculate_grade_statistics(data, course_number):
+    """Calculate average and median grades for a course."""
+    if data is None:
+        return None
+    
+    course_data = data[data['Course'] == int(course_number)]
+    if course_data.empty:
+        return None
+    
+    # Handle different data structures between v1 and v2
+    if 'Section' in course_data.columns:
+        overall_data = course_data[course_data['Section'] == 'OVERALL']
+        if overall_data.empty:
+            overall_data = course_data
+    else:
+        overall_data = course_data
+    
+    if overall_data.empty:
+        return None
+    
+    # Get average and median if available
+    avg_grade = None
+    median_grade = None
+    instructor_name = None
+    
+    # Debug: Print available columns
+    if st.session_state.get('debug_mode', False):
+        st.write(f"Available columns: {list(overall_data.columns)}")
+    
+    # Try different possible column names for average
+    for col in ['Avg', 'Average', 'Mean', 'avg', 'average']:
+        if col in overall_data.columns:
+            avg_grade = overall_data[col].iloc[0] if not overall_data.empty else None
+            break
+    
+    # Try different possible column names for median
+    for col in ['Median', 'median', 'Med']:
+        if col in overall_data.columns:
+            median_grade = overall_data[col].iloc[0] if not overall_data.empty else None
+            break
+    
+    # Try different possible column names for instructor
+    for col in ['Instructor', 'Instructor Name', 'Professor', 'instructor', 'professor']:
+        if col in overall_data.columns:
+            instructor_name = overall_data[col].iloc[0] if not overall_data.empty else None
+            break
+    
+    return {
+        'average': avg_grade,
+        'median': median_grade,
+        'instructor': instructor_name
+    }
+
 def main():
     # Header
     st.title("🎓 UBC Course Compare")
     st.markdown("Compare UBC courses by analyzing grade distributions, averages, and other metrics across different years, semesters, and professors.")
     
     # Data source information
-    with st.expander(" Data Sources & Coverage"):
+    with st.expander("📊 Data Sources & Coverage"):
         st.markdown("""
         **Data Coverage:**
         - **2014-2021**: Tableau Dashboard (Original)
@@ -189,6 +242,13 @@ def main():
         
         **Note**: Data structure changed in 2022, but the app automatically handles both formats.
         """)
+    
+    # # Debug mode toggle
+    # debug_mode = st.sidebar.checkbox("🔧 Debug Mode", help="Show additional debugging information")
+    # if debug_mode:
+    #     st.session_state['debug_mode'] = True
+    # else:
+    #     st.session_state['debug_mode'] = False
     
     # Sidebar
     st.sidebar.header("📚 Course Selection")
@@ -288,7 +348,11 @@ def main():
     
     # Main content area
     if course1_number and course2_number:
-        st.header(f"📊  Comparing {course1_code} {course1_number} vs {course2_code} {course2_number}")
+        # Create proper course labels with year and term
+        course1_label = f"{course1_code} {course1_number} {year1} {term1}"
+        course2_label = f"{course2_code} {course2_number} {year2} {term2}"
+        
+        st.header(f"📊  Comparing {course1_label} vs {course2_label}")
         
         # Get grade distribution data
         grade_dist1 = get_grade_distribution_data(course1_data, course1_number)
@@ -298,37 +362,83 @@ def main():
             # Create comparison chart
             fig = create_comparison_chart(
                 grade_dist1, grade_dist2,
-                f"{course1_code} {course1_number} ({year1}{term1})",
-                f"{course2_code} {course2_number} ({year2}{term2})"
+                course1_label,
+                course2_label
             )
             
             if fig:
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, width='stretch')
             
             # Summary statistics
             col1, col2 = st.columns(2)
             
             with col1:
-                st.subheader(f"📈 {course1_code} {course1_number} Summary")
+                st.subheader(f"📈 {course1_label} Summary")
                 stats1 = calculate_summary_stats(grade_dist1)
+                grade_stats1 = calculate_grade_statistics(course1_data, course1_number)
+                
                 if stats1:
                     st.metric("Total Students", f"{stats1['total_students']:,}")
+                    
+                    # Add grade statistics
+                    if grade_stats1:
+                        if grade_stats1['average'] is not None:
+                            st.metric("Average Grade", f"{grade_stats1['average']:.1f}%")
+                        else:
+                            st.metric("Average Grade", "N/A")
+                        
+                        if grade_stats1['median'] is not None:
+                            st.metric("Median Grade", f"{grade_stats1['median']:.1f}%")
+                        else:
+                            st.metric("Median Grade", "N/A")
+                        
+                        if grade_stats1['instructor'] is not None:
+                            st.metric("Instructor", grade_stats1['instructor'])
+                        else:
+                            st.metric("Instructor", "N/A")
+                    else:
+                        st.metric("Average Grade", "N/A")
+                        st.metric("Median Grade", "N/A")
+                        st.metric("Instructor", "N/A")
                     
                     # Grade distribution table
                     dist_df1 = pd.DataFrame(list(stats1['distribution_pct'].items()), 
                                           columns=['Grade Range', 'Percentage'])
-                    st.dataframe(dist_df1, use_container_width=True)
+                    st.dataframe(dist_df1, width='stretch')
             
             with col2:
-                st.subheader(f"📈 {course2_code} {course2_number} Summary")
+                st.subheader(f"📈 {course2_label} Summary")
                 stats2 = calculate_summary_stats(grade_dist2)
+                grade_stats2 = calculate_grade_statistics(course2_data, course2_number)
+                
                 if stats2:
                     st.metric("Total Students", f"{stats2['total_students']:,}")
+                    
+                    # Add grade statistics
+                    if grade_stats2:
+                        if grade_stats2['average'] is not None:
+                            st.metric("Average Grade", f"{grade_stats2['average']:.1f}%")
+                        else:
+                            st.metric("Average Grade", "N/A")
+                        
+                        if grade_stats2['median'] is not None:
+                            st.metric("Median Grade", f"{grade_stats2['median']:.1f}%")
+                        else:
+                            st.metric("Median Grade", "N/A")
+                        
+                        if grade_stats2['instructor'] is not None:
+                            st.metric("Instructor", grade_stats2['instructor'])
+                        else:
+                            st.metric("Instructor", "N/A")
+                    else:
+                        st.metric("Average Grade", "N/A")
+                        st.metric("Median Grade", "N/A")
+                        st.metric("Instructor", "N/A")
                     
                     # Grade distribution table
                     dist_df2 = pd.DataFrame(list(stats2['distribution_pct'].items()), 
                                           columns=['Grade Range', 'Percentage'])
-                    st.dataframe(dist_df2, use_container_width=True)
+                    st.dataframe(dist_df2, width='stretch')
             
             # Detailed comparison
             st.subheader("🔍 Detailed Comparison")
@@ -339,14 +449,14 @@ def main():
                 if grade_range in grade_dist1 and grade_range in grade_dist2:
                     comparison_data.append({
                         'Grade Range': grade_range,
-                        f'{course1_code} {course1_number}': grade_dist1[grade_range],
-                        f'{course2_code} {course2_number}': grade_dist2[grade_range],
-                        'Difference': grade_dist2[grade_range] - grade_dist1[grade_range]
+                        course1_label: grade_dist1[grade_range],
+                        course2_label: grade_dist2[grade_range],
+                        'Difference': grade_dist1[grade_range] - grade_dist2[grade_range]
                     })
             
             if comparison_data:
                 comparison_df = pd.DataFrame(comparison_data)
-                st.dataframe(comparison_df, use_container_width=True)
+                st.dataframe(comparison_df, width='stretch')
         
         else:
             st.error("Unable to load grade distribution data for one or both courses.")
