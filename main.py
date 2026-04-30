@@ -226,7 +226,7 @@ def calculate_grade_statistics(data, course_number):
 
 def main():
     # Header
-    st.title("🎓 UBC Course Compare")
+    st.title("UBC Course Compare")
     st.markdown("Compare UBC courses by analyzing grade distributions, averages, and other metrics across different years, semesters, and professors.")
     
     # Data source information
@@ -244,7 +244,7 @@ def main():
         """)
     
     # Sidebar
-    st.sidebar.header("📚 Course Selection")
+    st.sidebar.header("Course Selection")
     st.sidebar.markdown("Select two courses to compare:")
     
     # Course 1 Selection
@@ -434,7 +434,7 @@ def main():
                     st.dataframe(dist_df2, width='stretch')
             
             # Detailed comparison
-            st.subheader("🔍 Detailed Comparison")
+            st.subheader("Detailed Comparison")
             
             # Create comparison table
             comparison_data = []
