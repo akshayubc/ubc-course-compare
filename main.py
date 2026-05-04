@@ -242,6 +242,25 @@ def main():
         
         **Note**: Data structure changed in 2022, but the app automatically handles both formats.
         """)
+        # Instructions
+    with st.expander("ℹ️ How to use this app"):
+        st.markdown("""
+        ### How to Compare Courses:
+        
+        1. **Select Course 1**: Choose the course code, year, term, and course number
+        2. **Select Course 2**: Choose the second course to compare
+        3. **View Results**: The app will show:
+           - Interactive grade distribution charts
+           - Summary statistics for each course
+           - Detailed comparison tables
+        
+        ### Tips:
+        - Compare the same course across different years to see grade trends
+        - Compare different courses in the same term to see relative difficulty
+        - Use the charts to identify grade distribution patterns
+        - Check the summary statistics for enrollment numbers
+
+        """)
     
     # Sidebar
     st.sidebar.header("Course Selection")
@@ -460,26 +479,6 @@ def main():
     st.sidebar.markdown("Contact: akshay.ubcv@gmail.com")
     st.sidebar.markdown("**Data Source:** UBC Planning, Analytics, & Institutional Research Office")
     st.sidebar.markdown("**Coverage:** 2014-2024")
-    
-    # Instructions
-    with st.expander("ℹ️ How to use this app"):
-        st.markdown("""
-        ### How to Compare Courses:
-        
-        1. **Select Course 1**: Choose the course code, year, term, and course number
-        2. **Select Course 2**: Choose the second course to compare
-        3. **View Results**: The app will show:
-           - Interactive grade distribution charts
-           - Summary statistics for each course
-           - Detailed comparison tables
-        
-        ### Tips:
-        - Compare the same course across different years to see grade trends
-        - Compare different courses in the same term to see relative difficulty
-        - Use the charts to identify grade distribution patterns
-        - Check the summary statistics for enrollment numbers
-
-        """)
     
     # Developer credit
     st.markdown("---")
